@@ -4,9 +4,13 @@ on:
   push:
     branches:
       - main
+  pull_request:
+
+env:
+  DOCKER_BUILDKIT: "1"
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,18 +21,43 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-
-      - name: Install backend
-        run: |
-          cd services/auth-service
-          npm install
+          cache: npm
+          cache-dependency-path: |
+            frontend/package-lock.json
+            services/auth-service/package-lock.json
+            services/api-gateway/package-lock.json
+            services/metrics-service/package-lock.json
+            services/alert-service/package-lock.json
 
       - name: Install frontend
-        run: |
-          cd frontend
-          npm install
+        run: npm ci --prefix frontend
+
+      - name: Install auth-service
+        run: npm ci --prefix services/auth-service
+
+      - name: Install api-gateway
+        run: npm ci --prefix services/api-gateway
+
+      - name: Install metrics-service
+        run: npm ci --prefix services/metrics-service
+
+      - name: Install alert-service
+        run: npm ci --prefix services/alert-service
+
+      - name: Check backend syntax
+        run: npm run check
+
+      - name: Lint frontend
+        run: npm run lint --prefix frontend
 
       - name: Build frontend
-        run: |
-          cd frontend
-          npm run build
+        run: npm run build --prefix frontend
+
+      - name: Prepare compose env
+        run: cp .env.example .env
+
+      - name: Validate Docker Compose
+        run: docker compose config
+
+      - name: Build Docker images
+        run: docker compose build frontend api-gateway auth-service metrics-service alert-service

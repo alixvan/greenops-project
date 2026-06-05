@@ -1,0 +1,15 @@
+{
+  "name": "greenops-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GreenOps Platform - microservices Docker and Kubernetes project",
+  "scripts": {
+    "check": "npm run check --prefix services/auth-service && npm run check --prefix services/api-gateway && npm run check --prefix services/metrics-service && npm run check --prefix services/alert-service",
+    "build": "npm run build --prefix frontend",
+    "lint": "npm run lint --prefix frontend",
+    "compose:config": "docker compose config",
+    "docker:build": "docker compose build",
+    "up": "docker compose up --build"
+  },
+  "license": "MIT"
+}

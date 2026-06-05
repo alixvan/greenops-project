@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: greenops-config
+data:
+  POSTGRES_DB: greenops_db
+  POSTGRES_PORT: "5432"
+  DB_NAME: greenops_db
+  DB_HOST: postgres
+  DB_PORT: "5432"
+  REDIS_URL: redis://redis:6379
+  JWT_EXPIRES_IN: 1h
+  AUTH_SERVICE_PORT: "3001"
+  AUTH_SERVICE_URL: http://auth-service:3001
+  METRICS_SERVICE_URL: http://metrics-service:3003
+  ALERT_SERVICE_URL: http://alert-service:3004
+  ENERGY_THRESHOLD_KW: "70"
+  CARBON_THRESHOLD_GRAMS: "420"
+  RENEWABLE_MIN_PERCENTAGE: "45"

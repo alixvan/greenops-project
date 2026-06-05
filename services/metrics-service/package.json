@@ -1,0 +1,23 @@
+{
+  "name": "metrics-service",
+  "version": "1.0.0",
+  "description": "GreenOps energy metrics service",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "check": "node --check index.js && node --check db.js"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.21.0",
+    "prom-client": "^15.1.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

@@ -9,6 +9,6 @@ RUN npm ci --omit=dev
 COPY . .
 
 USER node
-EXPOSE 3001
+EXPOSE 3003
 
-CMD ["node", "server.js"]
+CMD ["node", "index.js"]
