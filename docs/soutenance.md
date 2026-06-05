@@ -237,9 +237,11 @@ Dans Grafana :
 
 | Panel | Interet |
 | --- | --- |
-| Disponibilite des services | prouve que les microservices sont joignables |
-| Trafic API Gateway | montre les appels HTTP par route/statut |
+| Tuiles de disponibilite | montre l'etat de chaque service en un coup d'oeil |
+| Trafic API par statut | montre les appels HTTP regroupes par statut |
 | Memoire des microservices | montre l'utilisation memoire des services Node.js |
+| CPU des microservices | montre l'activite CPU des services applicatifs |
+| Duree de collecte Prometheus | montre que Prometheus collecte correctement les targets |
 
 Point important :
 

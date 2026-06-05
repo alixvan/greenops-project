@@ -57,13 +57,19 @@ Le provisioning automatique charge :
 
 ## Dashboard GreenOps
 
-Le dashboard contient trois vues de base :
+Le dashboard est organise pour rester lisible pendant la soutenance :
+
+- une premiere ligne de tuiles de disponibilite par service ;
+- une deuxieme ligne pour le trafic API et la memoire ;
+- une troisieme ligne pour le CPU applicatif et la duree de collecte Prometheus.
 
 | Panel | Requete PromQL | Objectif |
 | --- | --- | --- |
-| Disponibilite des services | `up{job=~"api-gateway|auth-service|metrics-service|alert-service|prometheus"}` | Voir si les services sont scrapes et joignables |
-| Trafic API Gateway | `sum by (route, status) (rate(greenops_gateway_http_requests_total[5m]))` | Observer le trafic entrant par route et statut HTTP |
+| Tuiles de disponibilite | `up{job="..."}` | Voir immediatement si chaque service est joignable |
+| Trafic API par statut | `sum by (status) (rate(greenops_gateway_http_requests_total[5m]))` | Observer les reponses HTTP sans surcharger la legende |
 | Memoire des microservices | `process_resident_memory_bytes{job=~"api-gateway|auth-service|metrics-service|alert-service"}` | Suivre la memoire residentielle des services Node.js |
+| CPU des microservices | `rate(process_cpu_seconds_total{job=~"api-gateway|auth-service|metrics-service|alert-service"}[5m]) * 100` | Surveiller l'activite CPU applicative |
+| Duree de collecte Prometheus | `scrape_duration_seconds{job=~"api-gateway|auth-service|metrics-service|alert-service|prometheus"}` | Verifier que le scraping reste rapide |
 
 ## Diagnostic
 
