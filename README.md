@@ -65,6 +65,7 @@ GRAFANA_PORT=3006
 Dans ce cas, les acces deviennent `http://localhost:8081`, `http://localhost:9091` et `http://localhost:3006`.
 
 Grafana est provisionne automatiquement avec une datasource Prometheus et le dashboard `GreenOps Observability`.
+Prometheus scrape les metriques Docker via Nginx et `PROMETHEUS_TARGET_HOST`, ce qui rend les liens des targets ouvrables depuis le navigateur local.
 
 Identifiants Grafana de demonstration apres copie de `.env.example` :
 

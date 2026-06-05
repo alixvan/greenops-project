@@ -39,6 +39,7 @@ Les ports viennent de `.env`. Si Docker indique un conflit de port, changez uniq
 ```env
 NGINX_PORT=8081
 PROMETHEUS_PORT=9091
+PROMETHEUS_TARGET_HOST=10.9.1.152
 GRAFANA_PORT=3006
 ```
 
@@ -66,6 +67,17 @@ Pour Prometheus et Grafana :
 curl http://localhost:9090/-/healthy
 curl http://localhost:3002/api/health
 ```
+
+Les targets Prometheus Docker sont exposees via Nginx avec des chemins dedies :
+
+| Job | URL locale si `NGINX_PORT=8081` |
+| --- | --- |
+| `api-gateway` | http://localhost:8081/prometheus-targets/api-gateway/metrics |
+| `auth-service` | http://localhost:8081/prometheus-targets/auth-service/metrics |
+| `metrics-service` | http://localhost:8081/prometheus-targets/metrics-service/metrics |
+| `alert-service` | http://localhost:8081/prometheus-targets/alert-service/metrics |
+
+Dans l'interface Prometheus, les liens de targets pointent vers `${PROMETHEUS_TARGET_HOST}:${NGINX_PORT}` pour rester ouvrables depuis le navigateur de la machine hote. Sur Windows, utilisez l'IP locale de la machine si `host.docker.internal` ne s'ouvre pas dans le navigateur.
 
 Grafana charge automatiquement :
 

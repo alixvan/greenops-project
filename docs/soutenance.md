@@ -185,11 +185,13 @@ Prometheus collecte les metriques exposees par :
 
 | Job | Endpoint interne |
 | --- | --- |
-| `api-gateway` | `api-gateway:3000/metrics` |
-| `auth-service` | `auth-service:3001/metrics` |
-| `metrics-service` | `metrics-service:3003/metrics` |
-| `alert-service` | `alert-service:3004/metrics` |
-| `prometheus` | `prometheus:9090` |
+| `api-gateway` | `/prometheus-targets/api-gateway/metrics` via Nginx |
+| `auth-service` | `/prometheus-targets/auth-service/metrics` via Nginx |
+| `metrics-service` | `/prometheus-targets/metrics-service/metrics` via Nginx |
+| `alert-service` | `/prometheus-targets/alert-service/metrics` via Nginx |
+| `prometheus` | `host.docker.internal:${PROMETHEUS_PORT}/metrics` |
+
+En Docker local, Prometheus passe par Nginx et par la variable `PROMETHEUS_TARGET_HOST` pour que les liens affiches dans l'interface Prometheus soient cliquables depuis le navigateur Windows. Sur la machine de validation, cette variable vaut `10.9.1.152`. Dans Kubernetes, Prometheus utilise directement les noms de Services internes du cluster.
 
 Dans Prometheus, montrer :
 

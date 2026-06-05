@@ -164,10 +164,15 @@ services:
 
   prometheus:
     image: prom/prometheus:v3.0.1
+    env_file:
+      - .env
+    entrypoint: ["sh", "/etc/prometheus/render-config.sh"]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "${PROMETHEUS_PORT:-9090}:9090"
     volumes:
-      - ./infrastructure/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./infrastructure/prometheus/render-config.sh:/etc/prometheus/render-config.sh:ro
     networks:
       - app
       - observability

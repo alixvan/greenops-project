@@ -11,17 +11,21 @@ Prometheus est expose par Docker Compose sur le port defini par `PROMETHEUS_PORT
 | Valeur par defaut | http://localhost:9090 |
 | Validation locale si port occupe | http://localhost:9091 |
 
-La configuration se trouve dans `infrastructure/prometheus/prometheus.yml`.
+La configuration de reference se trouve dans `infrastructure/prometheus/prometheus.yml`.
+En Docker Compose, le fichier réellement utilise est genere au demarrage par `infrastructure/prometheus/render-config.sh` afin de reprendre les ports de `.env`.
+La variable `PROMETHEUS_TARGET_HOST` definit l'hote visible depuis le navigateur pour les liens de targets. Sur la machine de validation, elle vaut `10.9.1.152`.
 
 Targets scrapes :
 
 | Job | Endpoint |
 | --- | --- |
-| `prometheus` | `prometheus:9090` |
-| `api-gateway` | `api-gateway:3000/metrics` |
-| `auth-service` | `auth-service:3001/metrics` |
-| `metrics-service` | `metrics-service:3003/metrics` |
-| `alert-service` | `alert-service:3004/metrics` |
+| `prometheus` | `${PROMETHEUS_TARGET_HOST}:${PROMETHEUS_PORT}/metrics` |
+| `api-gateway` | `${PROMETHEUS_TARGET_HOST}:${NGINX_PORT}/prometheus-targets/api-gateway/metrics` |
+| `auth-service` | `${PROMETHEUS_TARGET_HOST}:${NGINX_PORT}/prometheus-targets/auth-service/metrics` |
+| `metrics-service` | `${PROMETHEUS_TARGET_HOST}:${NGINX_PORT}/prometheus-targets/metrics-service/metrics` |
+| `alert-service` | `${PROMETHEUS_TARGET_HOST}:${NGINX_PORT}/prometheus-targets/alert-service/metrics` |
+
+En local Docker, les routes `/prometheus-targets/...` sont servies par Nginx. Cela rend les liens de la page `Status > Target health` ouvrables depuis le navigateur, alors que les noms Docker internes comme `alert-service:3004` ne sont pas resolvables par Windows.
 
 Verification rapide :
 
@@ -105,4 +109,12 @@ docker compose logs grafana
 ```env
 PROMETHEUS_PORT=9091
 GRAFANA_PORT=3006
+```
+
+6. Si un lien de target Prometheus ne s'ouvre pas, verifier qu'il commence par la valeur de `PROMETHEUS_TARGET_HOST` et non par un nom interne Docker comme `alert-service`.
+
+Sur Windows, si `host.docker.internal` ne s'ouvre pas dans le navigateur, mettre l'IP locale de la machine dans `.env` :
+
+```env
+PROMETHEUS_TARGET_HOST=10.9.1.152
 ```
