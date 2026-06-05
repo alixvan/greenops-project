@@ -21,6 +21,33 @@ function StatusBadge({ status }) {
   return <span className={`status status-${normalized}`}>{status || "UNKNOWN"}</span>;
 }
 
+function getObservabilityLinks() {
+  if (typeof window === "undefined") {
+    return [];
+  }
+
+  const host = window.location.hostname || "localhost";
+  const protocol = window.location.protocol || "http:";
+  const portOverrides = window.location.port === "8081"
+    ? { prometheus: "9091", grafana: "3006" }
+    : { prometheus: "9090", grafana: "3002" };
+
+  return [
+    {
+      name: "Prometheus",
+      detail: "Targets et metriques applicatives",
+      url: `${protocol}//${host}:${portOverrides.prometheus}`,
+      status: "UP",
+    },
+    {
+      name: "Grafana",
+      detail: "Dashboard GreenOps Observability",
+      url: `${protocol}//${host}:${portOverrides.grafana}`,
+      status: "UP",
+    },
+  ];
+}
+
 function EnergyChart({ metrics }) {
   const points = useMemo(() => {
     if (!metrics.length) {
@@ -69,6 +96,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const latest = liveMetric || metrics[metrics.length - 1];
+  const observabilityLinks = useMemo(() => getObservabilityLinks(), []);
 
   async function loadPlatform() {
     const response = await axios.get("/api/platform/health");
@@ -310,6 +338,25 @@ function App() {
               ))}
             </div>
           </article>
+        </section>
+
+        <section className="panel observability-panel">
+          <div className="panel-heading">
+            <h3>Observabilite</h3>
+            <span>Prometheus et Grafana</span>
+          </div>
+
+          <div className="observability-list">
+            {observabilityLinks.map((link) => (
+              <a className="observability-link" href={link.url} target="_blank" rel="noreferrer" key={link.name}>
+                <div>
+                  <strong>{link.name}</strong>
+                  <span>{link.detail}</span>
+                </div>
+                <StatusBadge status={link.status} />
+              </a>
+            ))}
+          </div>
         </section>
 
         <section className="panel alerts-panel">

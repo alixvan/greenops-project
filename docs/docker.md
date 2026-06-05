@@ -34,6 +34,23 @@ Services exposes :
 | Prometheus | http://localhost:9090 |
 | Grafana | http://localhost:3002 |
 
+Les ports viennent de `.env`. Si Docker indique un conflit de port, changez uniquement les variables publiques :
+
+```env
+NGINX_PORT=8081
+PROMETHEUS_PORT=9091
+GRAFANA_PORT=3006
+```
+
+Puis relancez :
+
+```bash
+docker compose up -d
+docker compose ps
+```
+
+Sur la machine de validation du projet, les ports utilises sont `8081` pour l'application, `9091` pour Prometheus et `3006` pour Grafana.
+
 ## Verification
 
 ```bash
@@ -42,6 +59,24 @@ docker compose logs -f api-gateway
 curl http://localhost:8080/gateway-health
 curl http://localhost:8080/api/platform/health
 ```
+
+Pour Prometheus et Grafana :
+
+```bash
+curl http://localhost:9090/-/healthy
+curl http://localhost:3002/api/health
+```
+
+Grafana charge automatiquement :
+
+- la datasource `Prometheus`, configuree vers `http://prometheus:9090` dans le reseau Docker ;
+- le dashboard `GreenOps Observability`, fourni dans `infrastructure/grafana/dashboards`.
+
+Identifiants Grafana par defaut apres copie de `.env.example` :
+
+| Utilisateur | Mot de passe |
+| --- | --- |
+| `admin` | `GreenOps2026!Secure` |
 
 ## Reset des donnees
 

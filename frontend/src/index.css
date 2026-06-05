@@ -306,10 +306,49 @@ input:focus {
 }
 
 .service-list,
-.alerts-table {
+.alerts-table,
+.observability-list {
   display: grid;
   gap: 10px;
   margin-top: 14px;
+}
+
+.observability-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.observability-link {
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  color: var(--text);
+  text-decoration: none;
+  background: #f8fbf9;
+}
+
+.observability-link:hover {
+  border-color: rgba(31, 122, 122, 0.36);
+  background: #f1f8f5;
+}
+
+.observability-link div {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+}
+
+.observability-link strong {
+  font-size: 16px;
+}
+
+.observability-link span {
+  color: var(--muted);
+  font-size: 13px;
 }
 
 .service-row,
@@ -418,5 +457,9 @@ input:focus {
   .alert-row {
     grid-template-columns: 1fr;
     align-items: start;
+  }
+
+  .observability-list {
+    grid-template-columns: 1fr;
   }
 }

@@ -185,6 +185,8 @@ services:
       - "${GRAFANA_PORT:-3002}:3000"
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./infrastructure/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infrastructure/grafana/dashboards:/var/lib/grafana/dashboards:ro
     depends_on:
       prometheus:
         condition: service_started

@@ -54,6 +54,24 @@ Acces locaux :
 | Prometheus | http://localhost:9090 |
 | Grafana | http://localhost:3002 |
 
+Si un port est deja occupe, adaptez `.env` puis relancez Compose. Exemple utilise pendant la validation locale :
+
+```env
+NGINX_PORT=8081
+PROMETHEUS_PORT=9091
+GRAFANA_PORT=3006
+```
+
+Dans ce cas, les acces deviennent `http://localhost:8081`, `http://localhost:9091` et `http://localhost:3006`.
+
+Grafana est provisionne automatiquement avec une datasource Prometheus et le dashboard `GreenOps Observability`.
+
+Identifiants Grafana de demonstration apres copie de `.env.example` :
+
+| Utilisateur | Mot de passe |
+| --- | --- |
+| `admin` | `GreenOps2026!Secure` |
+
 Compte de demonstration :
 
 | Email | Mot de passe | Role |
@@ -99,6 +117,7 @@ Voir [docs/kubernetes.md](docs/kubernetes.md) pour les procedures de scaling, re
 - [Procedure Docker](docs/docker.md)
 - [Procedure Kubernetes](docs/kubernetes.md)
 - [API applicative](docs/api.md)
+- [Observabilite](docs/observability.md)
 - [Securite](docs/security.md)
 - [Support de soutenance](docs/soutenance.md)
 
